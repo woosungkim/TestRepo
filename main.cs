@@ -66,7 +66,7 @@ public class main : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
       
         shortCutView = GameObject.Find(name);
         
