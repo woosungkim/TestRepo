@@ -4,18 +4,29 @@ using System.Collections;
 public class CameraTransitions : MonoBehaviour {
 
 	// 구체적인 singleton으로 개선 요망
-	static CameraTransitions instance = null;
+	static CameraTransitions _instance = null;
 
-    // singleton방식의 가장 기본적인 형식으로 만듦.
-    public static CameraTransitions GetInstance()
+    // 인터넷 예제를 참고하여서 클래스가 스스로 gameobject를 만들고,
+    // 해당 싱글톤 인스턴스를 첨부하도록 했다.
+    public static CameraTransitions instance
     {
-        if(!instance)
+        get
         {
-            instance = (CameraTransitions)FindObjectOfType(typeof(CameraTransitions));
-            if (!instance)
-                Debug.LogError("There needs to be one active CameraTransitions script on GameObject in your scene");
+            if(!_instance)
+            {
+                _instance = (CameraTransitions)FindObjectOfType(typeof(CameraTransitions));
+                if (!_instance)
+                {
+                    GameObject container = new GameObject();
+                    container.name = "CameraTransitions Container";
+                    _instance = container.AddComponent(typeof(CameraTransitions)) as CameraTransitions;
+                }
+                
+            }
+
+            return _instance;
         }
-        return instance;
+
     }
 
 	enum CameraState : int { AR, VR }; 
@@ -30,7 +41,7 @@ public class CameraTransitions : MonoBehaviour {
 	}
 
 	void Awake() {
-		instance = this;
+		//_instance = this;
 	}
 	
 	void OnGUI() {

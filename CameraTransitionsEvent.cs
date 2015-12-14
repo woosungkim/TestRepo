@@ -71,11 +71,11 @@ public class CameraTransitionsEvent : MonoBehaviour {
 							    endPoint.y < 100 ) {// swipe gesture direction constraint
 								if ( mode ) {// is vr
 									mode = false;
-									CameraTransitions.GetInstance().changeCameraToAR();
+									CameraTransitions.instance.changeCameraToAR();
 								}
 								else {
 									mode = true;
-									CameraTransitions.GetInstance().changeCameraToVR();
+									CameraTransitions.instance.changeCameraToVR();
 								}
 							}
 
