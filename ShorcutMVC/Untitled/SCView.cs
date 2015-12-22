@@ -66,11 +66,11 @@ namespace ShorcutMVC.Untitled
                 GameObject prefab = Resource.Load(scItem[i].gameObjectName) as GameObject;
                 GameObject itemtemp = MonoBehaviour.Instantiate(prefab) as GameObject;
                 itemtemp.name = "item" + (i + 1);
-                itemtemp.transform.parent = itemView[i].parant;
+                itemtemp.transform.parent = itemView[scItem[i].groupId].transform;
                 itemView[i].active = true;
-                itemView[i].transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
-                itemView[i].GetComponent<Text>().fontSize = textSize;
-                itemView[i].GetComponent<Text>().color = textColor;
+                itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
+                itemtemp.GetComponent<Text>().fontSize = textSize;
+                itemtemp.GetComponent<Text>().color = textColor;
                 itemView[i].active = false;
             }
 		}

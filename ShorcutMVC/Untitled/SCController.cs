@@ -12,19 +12,20 @@ namespace ShorcutMVC.Untitled
 		private SCView scv;
 		private SCItem sci[];
 		private SCController scController;
-        public int mode;
-
+   
+         
 		public SCController()
 		{
             scController = new SCController();
             sci = new SCItem[201];
+          
             
 		}
 
 		~SCController()
 		{}
 
-		public void addItem(int ItemId, String ItemName, String path)
+		public void addItem(int ItemId, int groupId, String path)
 		{
 			if(itemIndex < SCItem.maxItemNum)
             {
@@ -35,7 +36,7 @@ namespace ShorcutMVC.Untitled
             }
 		}
 
-        public void setViewItem()
+        public void setViewItem(int mode, bool IsLeftSide)
         {
             scv = new SCView(sci, mode);
             scv.AllocateItem();
