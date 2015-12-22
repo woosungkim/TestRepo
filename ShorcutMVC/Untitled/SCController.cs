@@ -18,7 +18,6 @@ namespace ShorcutMVC.Untitled
 		{
             scController = new SCController();
             sci = new SCItem[201];
-          
             
 		}
 
@@ -27,10 +26,10 @@ namespace ShorcutMVC.Untitled
 
 		public void addItem(int ItemId, int groupId, String path)
 		{
-			if(itemIndex < SCItem.maxItemNum)
+			if(SCItem.itemNum < SCItem.maxItemNum)
             {
-                sci[itemIndex] = new SCItem(itemId, ItemName, path);
-                SCItem.itemNum++;
+                sci[SCItem.itemNum] = new SCItem(itemId, ItemName, path);
+            
             }else{
                 Console.WriteLine("Can't add the Item!");
             }
@@ -38,7 +37,7 @@ namespace ShorcutMVC.Untitled
 
         public void setViewItem(int mode, bool IsLeftSide)
         {
-            scv = new SCView(sci, mode);
+            scv = new SCView(sci, IsLeftSide, mode );
             scv.AllocateItem();
         }
 

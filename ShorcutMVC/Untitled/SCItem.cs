@@ -13,6 +13,7 @@ namespace ShorcutMVC.Untitled
 		public static int maxItemNum = 200;
         public static int itemNum = 0;
 		private int groupId;
+        private String itemName;
 		private String gameObjectName;
         
 		public SCItem()
@@ -25,12 +26,19 @@ namespace ShorcutMVC.Untitled
                 this.itemId = itemId;
                 this.groupId = groupId;
                 this.gameObjectName = gameObjectName;
+                this.itemName = "item" + itemId;
                 itemNum++;
             }
         }
 
 		~SCItem()
 		{}
+
+        public String itemName
+        {
+            get { return itemName; }
+            set { itemName = value; }
+        }
 
 		public String gameObjectName
 		{

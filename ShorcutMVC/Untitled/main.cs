@@ -21,6 +21,9 @@ public class main : MonoBehaviour
         scc.addItem(0, 0, "DemoToggleButton");
         scc.addItem(1, 0, "DemoToggleButton");
         scc.addItem(2, 0, "DemoToggleButton");
+        scc.setBtnSize(2f);
+        scc.setTextSize(30);
+        scc.setTextColor(Color.red);
         scc.setViewItem(mode, IsLeftSide);
     }
     

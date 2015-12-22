@@ -25,17 +25,19 @@ namespace ShorcutMVC.Untitled
 		private Vector3 _nowPos;
 		public Controller controller;
 		private Arm arm;
-		private GameObject[] itemView;
+		private GameObject[] itemGroup;
         private int mode;
 
 		public SCView(){}
 
-		public SCView(SCItem[] scItem, int mode)
+		public SCView(SCItem[] scItem, bool IsLeftSide, int mode)
 		{
             this.scItem = scItem;
             this.mode = mode;
+            this.IsLeftSide = IsLeftSide;
             controller = new Controller();
             _initPos = transform.position;
+            itemGroup = new GameObject[201];
 		}
 
 		~SCView()
@@ -65,13 +67,13 @@ namespace ShorcutMVC.Untitled
             {
                 GameObject prefab = Resource.Load(scItem[i].gameObjectName) as GameObject;
                 GameObject itemtemp = MonoBehaviour.Instantiate(prefab) as GameObject;
-                itemtemp.name = "item" + (i + 1);
-                itemtemp.transform.parent = itemView[scItem[i].groupId].transform;
-                itemView[i].active = true;
+                itemtemp.name = scItem[i].itemName;
+                itemtemp.transform.parent = itemGroup[scItem[i].groupId].transform;
+                itemGroup[i].active = true;
                 itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
                 itemtemp.GetComponent<Text>().fontSize = textSize;
                 itemtemp.GetComponent<Text>().color = textColor;
-                itemView[i].active = false;
+              
             }
 		}
 
@@ -83,13 +85,13 @@ namespace ShorcutMVC.Untitled
                 {
                     if(i==0)
                     {
-                        itemView[i].active = true;
-                        itemView[i].transform.position = _inipos + traked.transform.position + new Vector(-3f, 0, 5f);
+                        
+                        itemGroup[i].transform.position = _inipos + traked.transform.position + new Vector(-3f, 0, 5f);
                     }
                     else
                     {
-                        itemView[i].active = true;
-                        itemView[i].transform.position = itemView[i - 1].transform.position + Vector3.right;
+                        
+                        itemGroup[i].transform.position = itemView[i - 1].transform.position + Vector3.right;
                     }
                 }
             }else if(mode == 1)// ¼Õ¸ðµå
@@ -113,9 +115,9 @@ namespace ShorcutMVC.Untitled
                             for(int i = 0; i<SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemView[i].transform.position = worldPosition + new Vector3(2f, 0, 0);
+                                    itemGroup[i].transform.position = worldPosition + new Vector3(2f, 0, 0);
                                 else
-                                    itemView[i].transform.position = itemView[i - 1].transform.position + Vector3.right;
+                                    itemGroup[i].transform.position = itemGroup[i - 1].transform.position + Vector3.right;
                             }
                         }
                     }
@@ -133,9 +135,9 @@ namespace ShorcutMVC.Untitled
                             for (int i = 0; i < SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemView[i].transform.position = worldPosition + new Vector3(-6f, 0, 0);
+                                    itemGroup[i].transform.position = worldPosition + new Vector3(-6f, 0, 0);
                                 else
-                                    itemView[i].transform.position = itemView[i - 1].transform.position + Vector3.left;
+                                    itemGroup[i].transform.position = itemGroup[i - 1].transform.position + Vector3.left;
                             }
                         }
                     }
