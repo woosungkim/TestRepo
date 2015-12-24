@@ -10,55 +10,59 @@ namespace ShorcutMVC.Untitled
 	public class SCController
 	{
 		private SCView scv;
-		private SCItem sci[];
+		private SCItem[] sci;
 		private SCController scController;
    
          
 		public SCController()
 		{
-            scController = new SCController();
             sci = new SCItem[201];
-            
-		}
+        }
 
 		~SCController()
 		{}
 
-		public void addItem(int ItemId, int groupId, String path)
+		public void addItem(int itemId, int groupId, String path)
 		{
 			if(SCItem.itemNum < SCItem.maxItemNum)
             {
-                sci[SCItem.itemNum] = new SCItem(itemId, ItemName, path);
+                Console.WriteLine("3");
+                sci[SCItem.itemNum] = new SCItem(itemId, groupId, path);
             
             }else{
                 Console.WriteLine("Can't add the Item!");
             }
 		}
 
-        public void setViewItem(int mode, bool IsLeftSide)
+        public void createView(int mode, bool IsLeftSide)
         {
-            scv = new SCView(sci, IsLeftSide, mode );
+            scv = new SCView(sci, IsLeftSide, mode);
+        }
+
+        public void setViewItem()
+        {
+            
             scv.AllocateItem();
         }
 
 		public void setBtnSize(float btnSize)
 		{
-			scv.btnSize = btnsize;
+			scv.setBtnSize(btnSize);
 		}
 
 		public void setTextSize(int textSize)
 		{
-			scv.textSize = textSize;
+            scv.setTextSize(textSize);
 		}
 
 		public void setTextColor(Color color)
 		{
-			scv.textColor = color;
+            scv.setTextColor(color);
 		}
 
-        public void onDraw()
+        public void onDraw(HandController controller, GameObject camera)
 		{
-			scv.onDraw();
+			scv.onDraw(controller, camera);
 		}
 
 	}

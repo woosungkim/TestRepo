@@ -12,56 +12,67 @@ namespace ShorcutMVC.Untitled
 		private int itemId;
 		public static int maxItemNum = 200;
         public static int itemNum = 0;
-		private int groupId;
+	    private int groupId;
         private String itemName;
 		private String gameObjectName;
         
 		public SCItem()
 		{}
 
-        public SCItem(int itemId, int groupId, String gameObjectName)
+        public SCItem(int itemid, int groupId, String gameObjectName)
         {
-            if(ItemNum<maxItemNum)
+            if(itemNum<maxItemNum)
             {
-                this.itemId = itemId;
+                Console.WriteLine("1");
                 this.groupId = groupId;
+                this.itemId = itemid;
                 this.gameObjectName = gameObjectName;
-                this.itemName = "item" + itemId;
+                this.itemName = "item" + this.itemId;
                 itemNum++;
             }
         }
 
 		~SCItem()
 		{}
-
-        public String itemName
+        
+        public String getItemName()
         {
-            get { return itemName; }
-            set { itemName = value; }
+            return this.itemName;
         }
 
-		public String gameObjectName
-		{
-			get
-			{ return gameObjectName; }
-			set
-			{ gameObjectName = value; }
-		}
+        public void setItemName(String value)
+        {
+            this.itemName = value;
+        }
 
-		public int itemId
-		{
-			get
-			{ return itemId; }
-			set
-			{ itemId = value; }
-		}
+        public String getGameObjectName()
+        {
+            return this.gameObjectName;
+        }
 
-		public int groupId
-		{
-			get
-			{ return groupId; }
-			set
-			{ groupId = value; }
-		}
+        public void setGameObjectName(String value)
+        {
+            this.gameObjectName = value;
+        }
+
+        public int getItemId()
+        {
+            return this.itemId;
+        }
+
+        public void setItemId(int value)
+        {
+            this.itemId = value;
+        }
+
+        public int getGroupId()
+        {
+            return this.groupId;
+        }
+
+        public void setGroupId(int value)
+        {
+            this.groupId = value;
+        }
 	}
 }
