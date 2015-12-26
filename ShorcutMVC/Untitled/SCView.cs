@@ -26,7 +26,7 @@ namespace ShorcutMVC.Untitled
 		private Vector3 _nowPos;
 		public Controller controller;
 		private Arm arm;
-		private GameObject itemGroup;
+		//private GameObject itemGroup;
         private int mode;
         private GameObject go;
 		
@@ -39,7 +39,7 @@ namespace ShorcutMVC.Untitled
             this.IsLeftSide = IsLeftSide;
             controller = new Controller();
             _initPos = Vector3.zero;
-            itemGroup = new GameObject();
+            //itemGroup = new GameObject();
             GameObject go = GameObject.Find("ShorCut");
 
             
@@ -85,10 +85,11 @@ namespace ShorcutMVC.Untitled
             {
                 GameObject prefab = Resources.Load(scItem[i].getGameObjectName()) as GameObject;
                 GameObject itemtemp = MonoBehaviour.Instantiate(prefab) as GameObject;
+                
                 itemtemp.name = scItem[i].getItemName();
                 itemtemp.transform.parent = GameObject.Find("ShortCut").GetComponent<mainScript>().itemGroup.transform;
-                itemGroup.active = true;
                 itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
+               // itemGroup.active = true;
                 //itemtemp.GetComponent<Text>().fontSize = textSize;
                // itemtemp.GetComponent<Text>().color = textColor;
               
@@ -99,22 +100,31 @@ namespace ShorcutMVC.Untitled
         {
             this.trakedCamera = trackedCamera;
             this.handcontroller = handcontroller;
+
             if(mode == 0)//카메라 모드
             {
                 for(int i = 0; i<SCItem.itemNum; i++)
                 {
                     if(i==0)
                     {
-                        
+                        /*
                         itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
+                        */
+                        String temp = "item" + i;
+                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
                     }
                     else
                     {
-                        
+                        /*
                         itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
+                        */
+                        String temp2 = "item" + i;
+                        String temp1 = "item" + (i - 1);
+                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.right*2;
                     }
                 }
-            }else if(mode == 1)// 손모드
+            }
+            else if(mode == 1)// 손모드
             {
                 frame = controller.Frame(0);
                 hand = frame.Hands.Frontmost;
@@ -135,9 +145,16 @@ namespace ShorcutMVC.Untitled
                             for(int i = 0; i<SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemGroup.transform.position = worldPosition + new Vector3(2f, 0, 0);
+                                {
+                                    String temp = "item" + i;
+                                    GameObject.Find(temp).transform.position = worldPosition +  new Vector3(3f, 0, 0);
+                                }
                                 else
-                                    itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
+                                {
+                                    String temp2 = "item" + i;
+                                    String temp1 = "item" + (i - 1);
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.right * 2;
+                                }
                             }
                         }
                     }
@@ -155,15 +172,26 @@ namespace ShorcutMVC.Untitled
                             for (int i = 0; i < SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemGroup.transform.position = worldPosition + new Vector3(-6f, 0, 0);
+                                {
+                                    String temp = "item" + i;
+                                    GameObject.Find(temp).transform.position = worldPosition + new Vector3(-3f, 0, 0);
+                                }
                                 else
-                                    itemGroup.transform.position = itemGroup.transform.position + Vector3.left;
+                                {
+                                    String temp2 = "item" + i;
+                                    String temp1 = "item" + (i - 1);
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.left * 2;
+                                }
                             }
                         }
                     }
 
                 }
                 
+            }
+            else if(mode == 2)// 임의 위치 모드
+            {
+
             }
         }
 

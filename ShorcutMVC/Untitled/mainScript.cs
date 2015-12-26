@@ -11,6 +11,7 @@ public class mainScript : MonoBehaviour
     public GameObject trackedCamera;
     public bool IsLeftSide;
     public int mode;
+    [HideInInspector]
     public GameObject itemGroup;
     
     void Start()
@@ -18,8 +19,7 @@ public class mainScript : MonoBehaviour
         itemGroup = new GameObject();
        
         scc = new SCController();
-        scc.
-            (0, 0, "DemoToggleButton");   
+        scc.addItem(0, 0, "DemoToggleButton");   
         scc.addItem(1, 0, "DemoToggleButton");
         scc.addItem(2, 0, "DemoToggleButton");      
         scc.createView(mode, IsLeftSide);
