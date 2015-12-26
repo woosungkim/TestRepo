@@ -23,3 +23,13 @@ Third, Select prefab what you want function, attach in game scene.
 
 ###Documantation and tutorial###
 
+Please note wiki.
+
+===
+
+###Q & A
+
+Please email me 
+E-mail : jgmlckd@gmail.com
+
+===
