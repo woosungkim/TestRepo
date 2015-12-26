@@ -23,7 +23,7 @@ Third, Select prefab what you want function, attach in game scene.
 
 ###Documantation and tutorial###
 
-Please note wiki.
+Please note [[wiki]](https://github.com/flashwade03/TestRepo.wiki.git).
 
 ===
 
