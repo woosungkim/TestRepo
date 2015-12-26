@@ -65,5 +65,9 @@ namespace ShorcutMVC.Untitled
 			scv.onDraw(controller, camera);
 		}
 
+        public void setPosition(float x, float y)
+        {
+            scv.setPosition(x, y);
+        }
 	}
 }

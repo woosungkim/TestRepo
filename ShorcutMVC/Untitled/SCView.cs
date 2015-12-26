@@ -29,7 +29,7 @@ namespace ShorcutMVC.Untitled
 		//private GameObject itemGroup;
         private int mode;
         private GameObject go;
-		
+        private Vector3 userPos;
         public SCView(){}
 
 		public SCView(SCItem[] scItem, bool IsLeftSide, int mode)
@@ -79,6 +79,10 @@ namespace ShorcutMVC.Untitled
             this.textSize = value;
         }
 
+        public void setPosition(float x, float y)
+        {
+            userPos = new Vector3(x, y, 0);
+        }
 		public void AllocateItem()
 		{
             for(int i = 0; i<SCItem.itemNum; i++)
@@ -120,7 +124,7 @@ namespace ShorcutMVC.Untitled
                         */
                         String temp2 = "item" + i;
                         String temp1 = "item" + (i - 1);
-                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.right*2;
+                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
                     }
                 }
             }
@@ -153,7 +157,7 @@ namespace ShorcutMVC.Untitled
                                 {
                                     String temp2 = "item" + i;
                                     String temp1 = "item" + (i - 1);
-                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.right * 2;
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
                                 }
                             }
                         }
@@ -180,7 +184,7 @@ namespace ShorcutMVC.Untitled
                                 {
                                     String temp2 = "item" + i;
                                     String temp1 = "item" + (i - 1);
-                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + Vector3.left * 2;
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(-GameObject.Find(temp1).transform.localScale.x, 0, 0);
                                 }
                             }
                         }
@@ -189,9 +193,29 @@ namespace ShorcutMVC.Untitled
                 }
                 
             }
-            else if(mode == 2)// 임의 위치 모드
+            else if(mode == 2)// 임의 위치 모드, z축의 입력은 무의미하다고 판단해서 넣지 않았다.
             {
+                for (int i = 0; i < SCItem.itemNum; i++)
+                {
+                    if (i == 0)
+                    {
+                        /*
+                        itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
+                        */
+                        String temp = "item" + i;
+                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f) + userPos;
+                    }
+                    else
+                    {
+                        /*
+                        itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
+                        */
+                        String temp2 = "item" + i;
+                        String temp1 = "item" + (i - 1);
 
+                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                    }
+                }
             }
         }
 
