@@ -1,13 +1,13 @@
 #READ ME
 
-===
+---
 
 ###What is our framework###
 
 This is framework for LeapMotion GUI.
 It can be used for make shortcut and tip pointer easily.
 
-___
+===
 
 ###How can use###
 
@@ -19,7 +19,7 @@ Second, install the Cardboard SDK and our Project files in your Asset.
 
 Third, Select prefab what you want function, attach in game scene.
 
-___
+===
 
 ###Documantation and tutorial###
 
