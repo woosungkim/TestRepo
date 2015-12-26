@@ -2,14 +2,14 @@
 
 ---
 
-**What is our framework**
+##What is our framework##
 
 This is framework for LeapMotion GUI.
 It can be used for make shortcut and tip pointer easily.
 
 ---
 
-**How can use**
+##How can use##
 
 If you want to use our framework, you should set up the configurations.
 
@@ -21,5 +21,5 @@ Third, Select prefab what you want function, attach in game scene.
 
 ---
 
-**Documantation and tutorial**
+##Documantation and tutorial##
 
