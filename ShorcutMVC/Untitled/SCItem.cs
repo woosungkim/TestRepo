@@ -23,7 +23,6 @@ namespace ShorcutMVC.Untitled
         {
             if(itemNum<maxItemNum)
             {
-                Console.WriteLine("1");
                 this.groupId = groupId;
                 this.itemId = itemid;
                 this.gameObjectName = gameObjectName;
