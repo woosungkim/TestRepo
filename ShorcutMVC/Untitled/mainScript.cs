@@ -10,7 +10,7 @@ public class mainScript : MonoBehaviour
     public HandController handcontroller;
     public GameObject trackedCamera;
     public int numItem;
-    public float btnSize;
+    public float itemSize;
     public string prefabName;
     public int mode;
     public bool IsLeftSide;
@@ -26,17 +26,13 @@ public class mainScript : MonoBehaviour
         itemGroup = new GameObject();
        
         scc = new SCController();
-        /*
-        scc.addItem(0, 0, prefabName);
-        scc.addItem(1, 0, prefabName);
-        scc.addItem(2, 0, prefabName);
-        */
+
         for (int i = 0; i < numItem; i++)
         {
             scc.addItem(i, 0, prefabName);
         }
         scc.createView(mode, IsLeftSide, IsVertical);
-        scc.setBtnSize(btnSize);
+        scc.setItemSize(itemSize);
         scc.setTextSize(30);
         scc.setPosition(position_x, position_y);
         scc.setTextColor(Color.red);
