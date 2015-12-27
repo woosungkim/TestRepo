@@ -9,11 +9,14 @@ public class mainScript : MonoBehaviour
     public SCController scc;
     public HandController handcontroller;
     public GameObject trackedCamera;
-    public bool IsLeftSide;
+    public int numItem;
+    public float itemSize;
+    public string prefabName;
     public int mode;
-    public float x;
-    public float y;
-    public float btnSize;
+    public bool IsLeftSide;
+    public bool IsVertical;
+    public float position_x;
+    public float position_y;
 
     [HideInInspector]
     public GameObject itemGroup;
@@ -23,13 +26,15 @@ public class mainScript : MonoBehaviour
         itemGroup = new GameObject();
        
         scc = new SCController();
-        scc.addItem(0, 0, "DemoToggleButton");   
-        scc.addItem(1, 0, "DemoToggleButton");
-        scc.addItem(2, 0, "DemoToggleButton");      
-        scc.createView(mode, IsLeftSide);
-        scc.setBtnSize(btnSize);
+
+        for (int i = 0; i < numItem; i++)
+        {
+            scc.addItem(i, 0, prefabName);
+        }
+        scc.createView(mode, IsLeftSide, IsVertical);
+        scc.setItemSize(itemSize);
         scc.setTextSize(30);
-        scc.setPosition(x, y);
+        scc.setPosition(position_x, position_y);
         scc.setTextColor(Color.red);
         scc.setViewItem();
       

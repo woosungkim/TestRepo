@@ -26,7 +26,6 @@ namespace ShorcutMVC.Untitled
 		{
 			if(SCItem.itemNum < SCItem.maxItemNum)
             {
-                Console.WriteLine("3");
                 sci[SCItem.itemNum] = new SCItem(itemId, groupId, path);
             
             }else{
@@ -34,9 +33,9 @@ namespace ShorcutMVC.Untitled
             }
 		}
 
-        public void createView(int mode, bool IsLeftSide)
+        public void createView(int mode, bool IsLeftSide, bool IsVertical)
         {
-            scv = new SCView(sci, IsLeftSide, mode);
+            scv = new SCView(sci, IsLeftSide, mode, IsVertical);
         }
 
         public void setViewItem()
@@ -45,11 +44,11 @@ namespace ShorcutMVC.Untitled
             scv.AllocateItem();
         }
 
-		public void setBtnSize(float btnSize)
+		public void setItemSize(float itemSize)
 		{
-			scv.setBtnSize(btnSize);
+			scv.setItemSize(itemSize);
 		}
-
+        
 		public void setTextSize(int textSize)
 		{
             scv.setTextSize(textSize);
@@ -60,14 +59,16 @@ namespace ShorcutMVC.Untitled
             scv.setTextColor(color);
 		}
 
+        public void setPosition(float x, float y)
+        {
+            scv.setPosition(x, y);
+        }
+
         public void onDraw(HandController controller, GameObject camera)
 		{
 			scv.onDraw(controller, camera);
 		}
 
-        public void setPosition(float x, float y)
-        {
-            scv.setPosition(x, y);
-        }
+        
 	}
 }

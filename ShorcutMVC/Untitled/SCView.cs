@@ -15,7 +15,7 @@ namespace ShorcutMVC.Untitled
         public HandController handcontroller;
 		public bool IsLeftSide;
 		private SCItem[] scItem;
-		private float btnSize;
+		private float itemSize;
 		private Color textColor;
 		private int textSize;
         private Hand hand;
@@ -26,20 +26,22 @@ namespace ShorcutMVC.Untitled
 		private Vector3 _nowPos;
 		public Controller controller;
 		private Arm arm;
-		//private GameObject itemGroup;
         private int mode;
         private GameObject go;
         private Vector3 userPos;
-        public SCView(){}
+        private bool IsVertical;
 
-		public SCView(SCItem[] scItem, bool IsLeftSide, int mode)
+        public SCView() { }
+
+		public SCView(SCItem[] scItem, bool IsLeftSide, int mode, bool IsVertical)
 		{
             this.scItem = scItem;
             this.mode = mode;
             this.IsLeftSide = IsLeftSide;
+            this.IsVertical = IsVertical;
+
             controller = new Controller();
             _initPos = Vector3.zero;
-            //itemGroup = new GameObject();
             GameObject go = GameObject.Find("ShorCut");
 
             
@@ -49,14 +51,21 @@ namespace ShorcutMVC.Untitled
 		~SCView()
 		{}
 
-        public float getBtnSize()
+        public float getItemSize()
         {
-            return this.btnSize;
+            return this.itemSize;
         }
 
-        public void setBtnSize(float value)
+        public void setItemSize(float value)
         {
-            this.btnSize = value;
+            if(value!=0)
+            {
+                this.itemSize = value;
+            }
+            else
+            {
+                this.itemSize = 1;
+            }
         }
 
         public Color getTextColor()
@@ -83,6 +92,7 @@ namespace ShorcutMVC.Untitled
         {
             userPos = new Vector3(x, y, 0);
         }
+
 		public void AllocateItem()
 		{
             for(int i = 0; i<SCItem.itemNum; i++)
@@ -92,11 +102,7 @@ namespace ShorcutMVC.Untitled
                 
                 itemtemp.name = scItem[i].getItemName();
                 itemtemp.transform.parent = GameObject.Find("ShortCut").GetComponent<mainScript>().itemGroup.transform;
-                itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
-               // itemGroup.active = true;
-                //itemtemp.GetComponent<Text>().fontSize = textSize;
-               // itemtemp.GetComponent<Text>().color = textColor;
-              
+                itemtemp.transform.localScale = new Vector3(this.itemSize, this.itemSize, this.itemSize);
             }
 		}
 
@@ -107,28 +113,43 @@ namespace ShorcutMVC.Untitled
 
             if(mode == 0)//카메라 모드
             {
-                for(int i = 0; i<SCItem.itemNum; i++)
+                if(IsVertical)
                 {
-                    if(i==0)
+                    for (int i = 0; i < SCItem.itemNum; i++)
                     {
-                        /*
-                        itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
-                        */
-                        String temp = "item" + i;
-                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
-                    }
-                    else
-                    {
-                        /*
-                        itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
-                        */
-                        String temp2 = "item" + i;
-                        String temp1 = "item" + (i - 1);
-                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                        if (i == 0)
+                        {
+                            String temp = "item" + i;
+                            GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(0, 0, 5f);
+                        }
+                        else
+                        {
+                            String temp2 = "item" + i;
+                            String temp1 = "item" + (i - 1);
+                            GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(0, GameObject.Find(temp1).transform.localScale.y, 0);
+                        }
                     }
                 }
+                else
+                {
+                    for (int i = 0; i < SCItem.itemNum; i++)
+                    {
+                        if (i == 0)
+                        {
+                            String temp = "item" + i;
+                            GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
+                        }
+                        else
+                        {
+                            String temp2 = "item" + i;
+                            String temp1 = "item" + (i - 1);
+                            GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                        }
+                    }
+                }
+                
             }
-            else if(mode == 1)// 손모드
+            else if(mode == 1)// 손목 모드
             {
                 frame = controller.Frame(0);
                 hand = frame.Hands.Frontmost;
@@ -145,21 +166,41 @@ namespace ShorcutMVC.Untitled
                             Vector3 unityPosition = UnityVectorExtension.ToUnityScaled(wrist, false);
 
                             Vector3 worldPosition = handcontroller.transform.TransformPoint(unityPosition);
-
-                            for(int i = 0; i<SCItem.itemNum; i++)
+                            if(IsVertical)
                             {
-                                if (i == 0)
+                                for (int i = 0; i < SCItem.itemNum; i++)
                                 {
-                                    String temp = "item" + i;
-                                    GameObject.Find(temp).transform.position = worldPosition +  new Vector3(3f, 0, 0);
-                                }
-                                else
-                                {
-                                    String temp2 = "item" + i;
-                                    String temp1 = "item" + (i - 1);
-                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                    if (i == 0)
+                                    {
+                                        String temp = "item" + i;
+                                        GameObject.Find(temp).transform.position = worldPosition + new Vector3(3f, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        String temp2 = "item" + i;
+                                        String temp1 = "item" + (i - 1);
+                                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(0, -GameObject.Find(temp1).transform.localScale.y, 0);
+                                    }
                                 }
                             }
+                            else
+                            {
+                                for (int i = 0; i < SCItem.itemNum; i++)
+                                {
+                                    if (i == 0)
+                                    {
+                                        String temp = "item" + i;
+                                        GameObject.Find(temp).transform.position = worldPosition + new Vector3(3f, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        String temp2 = "item" + i;
+                                        String temp1 = "item" + (i - 1);
+                                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                    }
+                                }
+                            }
+                            
                         }
                     }
                     else//오른손일 때
@@ -173,20 +214,41 @@ namespace ShorcutMVC.Untitled
 
                             Vector3 worldPosition = handcontroller.transform.TransformPoint(unityPosition);
 
-                            for (int i = 0; i < SCItem.itemNum; i++)
+                            if(IsVertical)
                             {
-                                if (i == 0)
+                                for (int i = 0; i < SCItem.itemNum; i++)
                                 {
-                                    String temp = "item" + i;
-                                    GameObject.Find(temp).transform.position = worldPosition + new Vector3(-3f, 0, 0);
-                                }
-                                else
-                                {
-                                    String temp2 = "item" + i;
-                                    String temp1 = "item" + (i - 1);
-                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(-GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                    if (i == 0)
+                                    {
+                                        String temp = "item" + i;
+                                        GameObject.Find(temp).transform.position = worldPosition + new Vector3(-3f, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        String temp2 = "item" + i;
+                                        String temp1 = "item" + (i - 1);
+                                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(0, -GameObject.Find(temp1).transform.localScale.y, 0);
+                                    }
                                 }
                             }
+                            else
+                            {
+                                for (int i = 0; i < SCItem.itemNum; i++)
+                                {
+                                    if (i == 0)
+                                    {
+                                        String temp = "item" + i;
+                                        GameObject.Find(temp).transform.position = worldPosition + new Vector3(-3f, 0, 0);
+                                    }
+                                    else
+                                    {
+                                        String temp2 = "item" + i;
+                                        String temp1 = "item" + (i - 1);
+                                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(-GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                    }
+                                }
+                            }
+                            
                         }
                     }
 
@@ -195,27 +257,43 @@ namespace ShorcutMVC.Untitled
             }
             else if(mode == 2)// 임의 위치 모드, z축의 입력은 무의미하다고 판단해서 넣지 않았다.
             {
-                for (int i = 0; i < SCItem.itemNum; i++)
+                if(IsVertical)
                 {
-                    if (i == 0)
+                    for (int i = 0; i < SCItem.itemNum; i++)
                     {
-                        /*
-                        itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
-                        */
-                        String temp = "item" + i;
-                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f) + userPos;
-                    }
-                    else
-                    {
-                        /*
-                        itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
-                        */
-                        String temp2 = "item" + i;
-                        String temp1 = "item" + (i - 1);
+                        if (i == 0)
+                        {
+                            String temp = "item" + i;
+                            GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f) + userPos;
+                        }
+                        else
+                        {
+                            String temp2 = "item" + i;
+                            String temp1 = "item" + (i - 1);
 
-                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                            GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(0, -GameObject.Find(temp1).transform.localScale.y, 0);
+                        }
                     }
                 }
+                else
+                {
+                    for (int i = 0; i < SCItem.itemNum; i++)
+                    {
+                        if (i == 0)
+                        {
+                            String temp = "item" + i;
+                            GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f) + userPos;
+                        }
+                        else
+                        {
+                            String temp2 = "item" + i;
+                            String temp1 = "item" + (i - 1);
+
+                            GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                        }
+                    }
+                }
+                
             }
         }
 
