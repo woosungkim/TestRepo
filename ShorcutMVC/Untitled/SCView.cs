@@ -15,7 +15,7 @@ namespace ShorcutMVC.Untitled
         public HandController handcontroller;
 		public bool IsLeftSide;
 		private SCItem[] scItem;
-		private float btnSize;
+		private float itemSize;
 		private Color textColor;
 		private int textSize;
         private Hand hand;
@@ -29,8 +29,9 @@ namespace ShorcutMVC.Untitled
         private int mode;
         private GameObject go;
         private Vector3 userPos;
-        public SCView(){}
         private bool IsVertical;
+
+        public SCView() { }
 
 		public SCView(SCItem[] scItem, bool IsLeftSide, int mode, bool IsVertical)
 		{
@@ -50,14 +51,21 @@ namespace ShorcutMVC.Untitled
 		~SCView()
 		{}
 
-        public float getBtnSize()
+        public float getItemSize()
         {
-            return this.btnSize;
+            return this.itemSize;
         }
 
-        public void setBtnSize(float value)
+        public void setItemSize(float value)
         {
-            this.btnSize = value;
+            if(value!=0)
+            {
+                this.itemSize = value;
+            }
+            else
+            {
+                this.itemSize = 1;
+            }
         }
 
         public Color getTextColor()
@@ -94,7 +102,7 @@ namespace ShorcutMVC.Untitled
                 
                 itemtemp.name = scItem[i].getItemName();
                 itemtemp.transform.parent = GameObject.Find("ShortCut").GetComponent<mainScript>().itemGroup.transform;
-                itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
+                itemtemp.transform.localScale = new Vector3(this.itemSize, this.itemSize, this.itemSize);
             }
 		}
 
