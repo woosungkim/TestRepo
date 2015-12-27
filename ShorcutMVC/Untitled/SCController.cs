@@ -34,9 +34,9 @@ namespace ShorcutMVC.Untitled
             }
 		}
 
-        public void createView(int mode, bool IsLeftSide)
+        public void createView(int mode, bool IsLeftSide, bool IsVertical)
         {
-            scv = new SCView(sci, IsLeftSide, mode);
+            scv = new SCView(sci, IsLeftSide, mode, IsVertical);
         }
 
         public void setViewItem()
