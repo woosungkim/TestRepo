@@ -5,19 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using Leap;
 
-namespace ShorcutMVC.Untitled
+namespace ShorcutMVC.Untitled 
 {
-	public class SCView
+    public class SCView 
 	{
         
 		private SCController scController = null;
         public GameObject trakedCamera;
-        public HandController handcontoller;
+        public HandController handcontroller;
 		public bool IsLeftSide;
-		private SCItem scItem;
+		private SCItem[] scItem;
 		private float btnSize;
 		private Color textColor;
 		private int textSize;
+        private Hand hand;
 		private Frame frame;
 		private Finger finger;
 		private FingerList fingerlist;
@@ -25,10 +26,11 @@ namespace ShorcutMVC.Untitled
 		private Vector3 _nowPos;
 		public Controller controller;
 		private Arm arm;
-		private GameObject[] itemGroup;
+		//private GameObject itemGroup;
         private int mode;
-
-		public SCView(){}
+        private GameObject go;
+        private Vector3 userPos;
+        public SCView(){}
 
 		public SCView(SCItem[] scItem, bool IsLeftSide, int mode)
 		{
@@ -36,65 +38,97 @@ namespace ShorcutMVC.Untitled
             this.mode = mode;
             this.IsLeftSide = IsLeftSide;
             controller = new Controller();
-            _initPos = transform.position;
-            itemGroup = new GameObject[201];
+            _initPos = Vector3.zero;
+            //itemGroup = new GameObject();
+            GameObject go = GameObject.Find("ShorCut");
+
+            
+            
 		}
 
 		~SCView()
 		{}
 
-		public float btnSize
-		{
-			get{ return btnSize; }
-			set{ btnSize = value; }
-		}
+        public float getBtnSize()
+        {
+            return this.btnSize;
+        }
 
-		public Color textColor
-		{
-			get{ return textColor; }
-			set{ textColor = value; }
-		}
+        public void setBtnSize(float value)
+        {
+            this.btnSize = value;
+        }
 
-		public int textSize
-		{
-			get{ return textSize; }
-			set{ textSize = value; }
-		}
+        public Color getTextColor()
+        {
+            return this.textColor;
+        }
 
-		private void AllocateItem()
+        public void setTextColor(Color value)
+        {
+            this.textColor = value;
+        }
+
+        public int getTextSize()
+        {
+            return this.textSize;
+        }
+        
+        public void setTextSize(int value)
+        {
+            this.textSize = value;
+        }
+
+        public void setPosition(float x, float y)
+        {
+            userPos = new Vector3(x, y, 0);
+        }
+		public void AllocateItem()
 		{
             for(int i = 0; i<SCItem.itemNum; i++)
             {
-                GameObject prefab = Resource.Load(scItem[i].gameObjectName) as GameObject;
+                GameObject prefab = Resources.Load(scItem[i].getGameObjectName()) as GameObject;
                 GameObject itemtemp = MonoBehaviour.Instantiate(prefab) as GameObject;
-                itemtemp.name = scItem[i].itemName;
-                itemtemp.transform.parent = itemGroup[scItem[i].groupId].transform;
-                itemGroup[i].active = true;
+                
+                itemtemp.name = scItem[i].getItemName();
+                itemtemp.transform.parent = GameObject.Find("ShortCut").GetComponent<mainScript>().itemGroup.transform;
                 itemtemp.transform.localScale = new Vector3(this.btnSize, this.btnSize, this.btnSize);
-                itemtemp.GetComponent<Text>().fontSize = textSize;
-                itemtemp.GetComponent<Text>().color = textColor;
+               // itemGroup.active = true;
+                //itemtemp.GetComponent<Text>().fontSize = textSize;
+               // itemtemp.GetComponent<Text>().color = textColor;
               
             }
 		}
 
-        public void onDraw()
+        public void onDraw(HandController handcontroller, GameObject trackedCamera)
         {
+            this.trakedCamera = trackedCamera;
+            this.handcontroller = handcontroller;
+
             if(mode == 0)//카메라 모드
             {
                 for(int i = 0; i<SCItem.itemNum; i++)
                 {
                     if(i==0)
                     {
-                        
-                        itemGroup[i].transform.position = _inipos + traked.transform.position + new Vector(-3f, 0, 5f);
+                        /*
+                        itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
+                        */
+                        String temp = "item" + i;
+                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
                     }
                     else
                     {
-                        
-                        itemGroup[i].transform.position = itemView[i - 1].transform.position + Vector3.right;
+                        /*
+                        itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
+                        */
+                        String temp2 = "item" + i;
+                        String temp1 = "item" + (i - 1);
+                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
                     }
                 }
-            }else if(mode == 1)// 손모드
+            }
+            else if(mode == 1)// 손모드
             {
                 frame = controller.Frame(0);
                 hand = frame.Hands.Frontmost;
@@ -108,16 +142,23 @@ namespace ShorcutMVC.Untitled
                             arm = hand.Arm;
                             Vector wrist = arm.WristPosition;
 
-                            Vector3 unityPosition = UnityVecotrExtension.ToUnityScaled(wrist, false);
+                            Vector3 unityPosition = UnityVectorExtension.ToUnityScaled(wrist, false);
 
-                            Vector3 worldPosition = handController.transform.TransformPoint(unityPosition);
+                            Vector3 worldPosition = handcontroller.transform.TransformPoint(unityPosition);
 
                             for(int i = 0; i<SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemGroup[i].transform.position = worldPosition + new Vector3(2f, 0, 0);
+                                {
+                                    String temp = "item" + i;
+                                    GameObject.Find(temp).transform.position = worldPosition +  new Vector3(3f, 0, 0);
+                                }
                                 else
-                                    itemGroup[i].transform.position = itemGroup[i - 1].transform.position + Vector3.right;
+                                {
+                                    String temp2 = "item" + i;
+                                    String temp1 = "item" + (i - 1);
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                }
                             }
                         }
                     }
@@ -128,22 +169,53 @@ namespace ShorcutMVC.Untitled
                             arm = hand.Arm;
                             Vector wrist = arm.WristPosition;
 
-                            Vector3 unityPosition = UnityVecotrExtension.ToUnityScaled(wrist, false);
+                            Vector3 unityPosition = UnityVectorExtension.ToUnityScaled(wrist, false);
 
-                            Vector3 worldPosition = handController.transform.TransformPoint(unityPosition);
+                            Vector3 worldPosition = handcontroller.transform.TransformPoint(unityPosition);
 
                             for (int i = 0; i < SCItem.itemNum; i++)
                             {
                                 if (i == 0)
-                                    itemGroup[i].transform.position = worldPosition + new Vector3(-6f, 0, 0);
+                                {
+                                    String temp = "item" + i;
+                                    GameObject.Find(temp).transform.position = worldPosition + new Vector3(-3f, 0, 0);
+                                }
                                 else
-                                    itemGroup[i].transform.position = itemGroup[i - 1].transform.position + Vector3.left;
+                                {
+                                    String temp2 = "item" + i;
+                                    String temp1 = "item" + (i - 1);
+                                    GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(-GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                                }
                             }
                         }
                     }
 
                 }
                 
+            }
+            else if(mode == 2)// 임의 위치 모드, z축의 입력은 무의미하다고 판단해서 넣지 않았다.
+            {
+                for (int i = 0; i < SCItem.itemNum; i++)
+                {
+                    if (i == 0)
+                    {
+                        /*
+                        itemGroup.transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f);
+                        */
+                        String temp = "item" + i;
+                        GameObject.Find(temp).transform.position = _initPos + this.trakedCamera.transform.position + new Vector3(-3f, 0, 5f) + userPos;
+                    }
+                    else
+                    {
+                        /*
+                        itemGroup.transform.position = itemGroup.transform.position + Vector3.right;
+                        */
+                        String temp2 = "item" + i;
+                        String temp1 = "item" + (i - 1);
+
+                        GameObject.Find(temp2).transform.position = GameObject.Find(temp1).transform.position + new Vector3(GameObject.Find(temp1).transform.localScale.x, 0, 0);
+                    }
+                }
             }
         }
 
