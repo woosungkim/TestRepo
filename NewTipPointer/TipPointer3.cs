@@ -8,6 +8,8 @@ public class TipPointer3 : MonoBehaviour {
     //포인팅 가능한 레이어를 나타냄.
     public LayerMask pointableLayers = ~0;
 
+    //싱글턴 오브젝트
+    protected TipPointer3 _instance;
     //사용자가 가르킬 수 있는 오브젝트의 최대 거리.
     public float pointingObjectDistance = 1.0f;
 
@@ -54,11 +56,17 @@ public class TipPointer3 : MonoBehaviour {
     public GameObject pointerPrefab;
     
     //오브젝트 풀 방식에 필요한 변수.
-    public List<GameObject> pointerRightPool = new List<GameObject>();
-    public List<GameObject> pointerLeftPool = new List<GameObject>();
+    protected List<GameObject> pointerRightPool = new List<GameObject>();
+    protected List<GameObject> pointerLeftPool = new List<GameObject>();
 
     //사용할 포인터의 모양 프리펩
     public string pointerPrefabName;
+
+
+    void Awake()
+    {
+        _instance = this;
+    }
 
     // Use this for initialization
     void Start()
@@ -69,9 +77,6 @@ public class TipPointer3 : MonoBehaviour {
         createValue();
         createPointer();
         setPointer();
-
-        
-       
 
     }
     
@@ -209,98 +214,112 @@ public class TipPointer3 : MonoBehaviour {
 
 
         frame = leap_controller.Frame(0);
-
+      
         leap_right_finger_list = frame.Hands.Rightmost.Fingers;//오른손가락
         leap_left_finger_list = frame.Hands.Leftmost.Fingers;//왼손가락
         if(isBothHand)//양손 모드일 경우
         {
             int i = 0;
-            foreach(GameObject rightFinger in pointerRightPool)
+            if(frame.Hands.Rightmost.IsRight)
             {
-                for(int j = 0; j<5; j++)
+                foreach (GameObject rightFinger in pointerRightPool)
                 {
-                   if(rightFinger.active==true)// 모든 손가락 중에서 활성화 된 손가락만.
-                   { 
-                        if(type[i] == leap_right_finger_list[j].Type())// 원하는 손가락 타입과 감지된 손가락의 타입이 같을 경우.
-                        {
-                            position = leap_right_finger_list[j].TipPosition;
-                            Finger finger = leap_right_finger_list[j];
-
-                            unityposition = position.ToUnityScaled(false);
-                            worldPosition = handcontroller.transform.TransformPoint(unityposition);
-                            rightFinger.transform.position = worldPosition;
-                        }
-                   }
-                }
-                i++;
-            }
-            i = 0;
-
-            foreach(GameObject leftFinger in pointerLeftPool)
-            {
-                for (int j = 0; j < 5; j++)
-                {
-                    if (leftFinger.active == true)
+                    for (int j = 0; j < 5; j++)
                     {
-                        if (type[i] == leap_left_finger_list[j].Type())
+                        if (rightFinger.active == true)// 모든 손가락 중에서 활성화 된 손가락만.
                         {
-                            position = leap_left_finger_list[j].TipPosition;
-                            Finger finger = leap_left_finger_list[j];
+                            if (type[i] == leap_right_finger_list[j].Type())// 원하는 손가락 타입과 감지된 손가락의 타입이 같을 경우.
+                            {
+                                position = leap_right_finger_list[j].TipPosition;
+                                Finger finger = leap_right_finger_list[j];
 
-                            unityposition = position.ToUnityScaled(false);
-                            worldPosition = handcontroller.transform.TransformPoint(unityposition);
-                            leftFinger.transform.position = worldPosition;
+                                unityposition = position.ToUnityScaled(false);
+                                worldPosition = handcontroller.transform.TransformPoint(unityposition);
+                                rightFinger.transform.position = worldPosition;
+                            }
                         }
                     }
+                    i++;
                 }
-                i++;
+                i = 0;
             }
+            
+            if(frame.Hands.Leftmost.IsLeft)
+            {
+                foreach (GameObject leftFinger in pointerLeftPool)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (leftFinger.active == true)
+                        {
+                            if (type[i] == leap_left_finger_list[j].Type())
+                            {
+                                position = leap_left_finger_list[j].TipPosition;
+                                Finger finger = leap_left_finger_list[j];
+
+                                unityposition = position.ToUnityScaled(false);
+                                worldPosition = handcontroller.transform.TransformPoint(unityposition);
+                                leftFinger.transform.position = worldPosition;
+                            }
+                        }
+                    }
+                    i++;
+                }
+            }
+           
         }
         else if(isLeftHand)// 한 손만 사용하고, 그것이 왼손일 경우
         {
             int i = 0;
-            foreach(GameObject leftFinger in pointerLeftPool)
+            if (frame.Hands.Leftmost.IsLeft)
             {
-                for (int j = 0; j < 5; j++)
+                foreach (GameObject leftFinger in pointerLeftPool)
                 {
-                    if (leftFinger.active == true)
+                    for (int j = 0; j < 5; j++)
                     {
-                        if (type[i] == leap_left_finger_list[j].Type())
+                        if (leftFinger.active == true)
                         {
-                            position = leap_left_finger_list[j].TipPosition;
-                            Finger finger = leap_left_finger_list[j];
+                            if (type[i] == leap_left_finger_list[j].Type())
+                            {
+                                position = leap_left_finger_list[j].TipPosition;
+                                Finger finger = leap_left_finger_list[j];
 
-                            unityposition = position.ToUnityScaled(false);
-                            worldPosition = handcontroller.transform.TransformPoint(unityposition);
-                            leftFinger.transform.position = worldPosition;
+                                unityposition = position.ToUnityScaled(false);
+                                worldPosition = handcontroller.transform.TransformPoint(unityposition);
+                                leftFinger.transform.position = worldPosition;
+                            }
                         }
                     }
+                    i++;
                 }
-                i++;
             }
                 
         }
         else // 한 손만 사용하고, 그것이 오른손일 경우
         {
             int i = 0;
-            foreach(GameObject rightFinger in pointerRightPool)
+            if (frame.Hands.Rightmost.IsRight)
             {
-                for (int j = 0; j < 5; j++)
+                foreach (GameObject rightFinger in pointerRightPool)
                 {
-                    if (rightFinger.active == true)
+                    for (int j = 0; j < 5; j++)
                     {
-                        if (type[i] == leap_right_finger_list[j].Type())
+                        if (rightFinger.active == true)// 모든 손가락 중에서 활성화 된 손가락만.
                         {
-                            position = leap_right_finger_list[j].TipPosition;
-                            Finger finger = leap_right_finger_list[j];
+                            if (type[i] == leap_right_finger_list[j].Type())// 원하는 손가락 타입과 감지된 손가락의 타입이 같을 경우.
+                            {
+                                position = leap_right_finger_list[j].TipPosition;
+                                Finger finger = leap_right_finger_list[j];
 
-                            unityposition = position.ToUnityScaled(false);
-                            worldPosition = handcontroller.transform.TransformPoint(unityposition);
-                            rightFinger.transform.position = worldPosition;
+                                unityposition = position.ToUnityScaled(false);
+                                worldPosition = handcontroller.transform.TransformPoint(unityposition);
+                                rightFinger.transform.position = worldPosition;
+                            }
                         }
                     }
+                    i++;
                 }
-                i++;
+                i = 0;
             }
         }
        
